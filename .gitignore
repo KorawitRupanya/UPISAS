@@ -2,4 +2,5 @@
 demo-managed-system/node_modules
 demo-managed-system/package-lock.json
 venv
+uenv 
 __pycache__
