@@ -16,7 +16,7 @@ python -m UPISAS.tests.upisas.test_exemplar
 python -m UPISAS.tests.upisas.test_strategy
 python -m UPISAS.tests.swim.test_swim_interface
 
-python -m UPISAS.tests.your_exemplar.test_your_exemplar_interface
+python -m UPISAS.tests.ews.test_ews_interface
 ```
 ### Run
 In a terminal, navigate to the parent folder of the project and issue:

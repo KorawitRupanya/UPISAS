@@ -2,14 +2,14 @@ import unittest
 import time
 
 from UPISAS import get_response_for_get_request
-from UPISAS.exemplars.your_exemplar import YourExemplar
+from UPISAS.exemplars.ews import EWS
 from UPISAS.strategies.empty_strategy import EmptyStrategy
 
 
-class TestYourExemplarInterface(unittest.TestCase):
+class TesEWSInterface(unittest.TestCase):
 
     def setUp(self):
-        self.exemplar = YourExemplar(auto_start=True)
+        self.exemplar = EWS(auto_start=True)
         self._start_server_and_wait_until_is_up()
         self.strategy = EmptyStrategy(self.exemplar)
 
