@@ -16,6 +16,7 @@ python -m UPISAS.tests.upisas.test_exemplar
 python -m UPISAS.tests.upisas.test_strategy
 python -m UPISAS.tests.swim.test_swim_interface
 
+This is how to run test for EWS interface
 python -m UPISAS.tests.ews.test_ews_interface
 ```
 ### Run
