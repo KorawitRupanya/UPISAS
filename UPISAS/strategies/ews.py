@@ -41,16 +41,14 @@ class EwsStrategy(Strategy):
 
     def plan(self):
 
+        # Example config list
         data = self.knowledge.analysis_data
-
         exploration_time_frame = 10
         upper_confidence_bound_parameter = 2
 
-        best_config = self.ucb_algorithm(data, exploration_time_frame, self.reward_function(data), upper_confidence_bound_parameter)
-        print(f'Best config: {best_config}')
-        self.knowledge.plan_data = best_config
-        
-        return True
+        # Call ucb_algorithm
+        best_config = self.ucb_algorithm(data, exploration_time_frame, upper_confidence_bound_parameter)
+        print(f'Best architecture: {best_config}')
 
     def response_time(self, data):
         # Get the Response time from the monitored data and clients
@@ -93,8 +91,8 @@ class EwsStrategy(Strategy):
         return output_list
     
 
-    def ucb_algorithm(self, config_list, exploration_time_frame, reward_function, upper_confidence_bound_parameter):
-        # Initialize variables
+    def ucb_algorithm(self, config_list, exploration_time_frame, upper_confidence_bound_parameter):
+    # Initialize variables
         average_rewards = np.zeros(len(config_list))
         trial_counts = np.zeros(len(config_list))
 
@@ -104,7 +102,7 @@ class EwsStrategy(Strategy):
             random_config_index = random.randint(0, len(config_list) - 1)
 
             # Calculate the reward for the selected config
-            reward = reward_function(config_list[random_config_index])
+            reward = self.reward_function(config_list[random_config_index])
 
             # Update average reward and trial count
             average_rewards[random_config_index] = (average_rewards[random_config_index] * trial_counts[random_config_index] + reward) / (trial_counts[random_config_index] + 1)
@@ -119,7 +117,7 @@ class EwsStrategy(Strategy):
             best_config_index = np.argmax(upper_confidence_bounds)
 
             # Calculate the reward for the selected config
-            reward = reward_function(config_list[best_config_index])
+            reward = self.reward_function(config_list[best_config_index])
 
             # Update average reward and trial count
             average_rewards[best_config_index] = (average_rewards[best_config_index] * trial_counts[best_config_index] + reward) / (trial_counts[best_config_index] + 1)
@@ -129,15 +127,8 @@ class EwsStrategy(Strategy):
         best_config_index = np.argmax(average_rewards)
         return config_list[best_config_index]
 
-    # Example usage
-    # config_list = [
-    #     {"config": 1, "response_time": 100},
-    #     {"config": 2, "response_time": 150},
-    #     {"config": 3, "response_time": 200},
-    # ]
-
-   
-
     def reward_function(self, config):
         # Calculate the reward for the given config
+        # time = config["Response_time"]
+        # print(time)
         return 1000 / config["Response_time"]

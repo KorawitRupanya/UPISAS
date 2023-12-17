@@ -21,13 +21,13 @@ if __name__ == '__main__':
             # input()
             time.sleep(5)
             strategy.monitor()
-            print('monitor done')
+            print('monitoring done...')
             time.sleep(5)
             strategy.get_adaptation_options()
             print('get_adaptation_options done')
             time.sleep(5)
             if strategy.analyze(): 
-                print('analyze done...')
+                print('analysis done...')
                 time.sleep(5)
                 if strategy.plan():
                     print('plan done...')
