@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Knowledge:
+    monitored_fresh_data: dict
     monitored_data: dict
     analysis_data: dict
     plan_data: dict

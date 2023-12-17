@@ -14,7 +14,7 @@ class Strategy(ABC):
 
     def __init__(self, exemplar):
         self.exemplar = exemplar
-        self.knowledge = Knowledge(dict(), dict(), dict(), dict(), dict(), dict(), dict())
+        self.knowledge = Knowledge(dict(), dict(), dict(), dict(), dict(), dict(), dict(), dict())
 
     def ping(self):
         ping_res = self._perform_get_request(self.exemplar.base_endpoint)
@@ -26,18 +26,20 @@ class Strategy(ABC):
         if with_validation:
             validate_schema(fresh_data, self.knowledge.monitor_schema)
         data = self.knowledge.monitored_data
+        self.knowledge.monitored_fresh_data = fresh_data
         for key in list(fresh_data.keys()):
             if key not in data:
                 data[key] = []
             data[key].append(fresh_data[key])
-        print("[Knowledge]\tdata monitored so far: " + str(self.knowledge.monitored_data))
+        #print("[Knowledge]\tdata monitored so far: " + str(self.knowledge.monitored_data))
         return True
 
     def execute(self, adaptation, endpoint_suffix="execute", with_validation=True):
         if with_validation:
             validate_schema(adaptation, self.knowledge.execute_schema)
         url = '/'.join([self.exemplar.base_endpoint, endpoint_suffix])
-        response = requests.put(url, json=adaptation)
+        headers = {'Content-Type': 'application/json',}
+        response = requests.put(url,headers=headers, json=adaptation)
         print("[Execute]\tposted configuration: " + str(adaptation))
         if response.status_code == 404:
             logging.error("Cannot execute adaptation on remote system, check that the execute endpoint exists.")
@@ -49,7 +51,7 @@ class Strategy(ABC):
         if with_validation:
             validate_schema(self.knowledge.adaptation_options, self.knowledge.adaptation_options_schema)
         logging.info("adaptation_options set to: ")
-        pp.pprint(self.knowledge.adaptation_options)
+        #pp.pprint(self.knowledge.adaptation_options)
 
     def get_monitor_schema(self, endpoint_suffix = "monitor_schema"):
         self.knowledge.monitor_schema = self._perform_get_request(endpoint_suffix)
