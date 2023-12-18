@@ -49,6 +49,7 @@ class EwsStrategy(Strategy):
         # Call ucb_algorithm
         best_config = self.ucb_algorithm(data, exploration_time_frame, upper_confidence_bound_parameter)
         print(f'Best architecture: {best_config}')
+        self.knowledge.plan_data = best_config
 
     def response_time(self, data):
         # Get the Response time from the monitored data and clients

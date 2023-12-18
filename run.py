@@ -32,5 +32,6 @@ if __name__ == '__main__':
                 if strategy.plan():
                     print('plan done...')
                     strategy.execute({"config" : strategy.knowledge.plan_data})
+                    print('execute done...')
     except:
         sys.exit(0)
