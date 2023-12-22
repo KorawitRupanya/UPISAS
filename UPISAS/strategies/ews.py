@@ -25,7 +25,7 @@ class EwsStrategy(Strategy):
         
         for config in list_of_config:
             #print(f'Config: {config}')
-            time.sleep(5)
+            time.sleep(3)
             self.execute({"config": config})
             time.sleep(2)
             self.monitor()
@@ -52,19 +52,24 @@ class EwsStrategy(Strategy):
         self.knowledge.plan_data = best_config
 
     def response_time(self, data):
+        # Initialize counter and value with default values
+        counter = None
+        value = None
         # Get the Response time from the monitored data and clients
         for metric in data['metrics']:
             if metric['name'] == 'response_time':
                 counter = metric['counter']
                 value = metric['value']
+                break
 
         # Print the counter and value
-        response_time = value / counter
         if counter is not None and value is not None:
+            response_time = value / counter
             print(f'"Response_time: {response_time} ms."')
+            return response_time
         else:
             print('No metric found with name "response_time"')
-        return response_time
+        return None
 
     def find_arch_info(self, input_string):
         # Extracting the substrings using regular expressions
@@ -130,6 +135,9 @@ class EwsStrategy(Strategy):
 
     def reward_function(self, config):
         # Calculate the reward for the given config
-        # time = config["Response_time"]
-        # print(time)
-        return 1000 / config["Response_time"]
+        response_time = config.get("Response_time")
+        if response_time is not None and response_time > 0:
+            reward = 1000 / response_time
+            return reward
+        else:
+            return 1
