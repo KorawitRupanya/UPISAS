@@ -20,7 +20,7 @@ class Strategy(ABC):
         ping_res = self._perform_get_request(self.exemplar.base_endpoint)
         logging.info(f"ping result: {ping_res}")
 
-    def monitor(self, endpoint_suffix="monitor", with_validation=True):
+    def monitor(self, endpoint_suffix="monitor", with_validation=False):
         fresh_data = self._perform_get_request(endpoint_suffix)
         print("[Monitor]\tgot fresh_data: " + str(fresh_data))
         if with_validation:
@@ -34,13 +34,13 @@ class Strategy(ABC):
         #print("[Knowledge]\tdata monitored so far: " + str(self.knowledge.monitored_data))
         return True
 
-    def execute(self, adaptation, endpoint_suffix="execute", with_validation=True):
+    def execute(self, adaptation, endpoint_suffix="execute", with_validation=False):
         if with_validation:
             validate_schema(adaptation, self.knowledge.execute_schema)
         url = '/'.join([self.exemplar.base_endpoint, endpoint_suffix])
         headers = {'Content-Type': 'application/json',}
         response = requests.put(url,headers=headers, json=adaptation)
-        print("[Execute]\tposted configuration: " + str(adaptation))
+        #print("[Execute]\tposted configuration: " + str(adaptation))
         if response.status_code == 404:
             logging.error("Cannot execute adaptation on remote system, check that the execute endpoint exists.")
             raise EndpointNotReachable

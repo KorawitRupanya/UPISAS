@@ -15,23 +15,33 @@ if __name__ == '__main__':
         strategy.get_monitor_schema()
         strategy.get_adaptation_options_schema()
         strategy.get_execute_schema()
+        time.sleep(5)
+        strategy.get_adaptation_options()
+        print('Get adaptation options...done')
         
 
         while True:
             # input()
             time.sleep(5)
             strategy.monitor()
-            print('monitoring done...')
+            print('Monitoring done...')
             time.sleep(5)
-            strategy.get_adaptation_options()
-            print('get_adaptation_options done')
-            time.sleep(5)
-            if strategy.analyze(): 
-                print('analysis done...')
-                time.sleep(5)
-                if strategy.plan():
-                    print('plan done...')
-                    strategy.execute({"config" : strategy.knowledge.plan_data})
-                    print('execute done...')
+            # there is no knowledge, if the learning is not finished, 
+            #Do analyze, plan and execute
+            if not strategy.knowledge.plan_data:
+                start = time.time()
+                if strategy.analyze(): 
+                    print('Analysis done...')
+                    time.sleep(5)
+                    if strategy.plan():
+                        print('Planning done...')
+                        strategy.execute({"config" : strategy.knowledge.plan_data.get('config')})
+                        print("[Execute]\tposted configuration: " + str(strategy.knowledge.plan_data.get('config')))
+                        print('Execute done...')
+                        end = time.time()
+                print(f'Time taken to adapt: {end - start} seconds')
+            # Once the learning is Finished, print the best architecture
+            else:
+                print(f'Best architecture: {strategy.knowledge.plan_data}')
     except:
         sys.exit(0)

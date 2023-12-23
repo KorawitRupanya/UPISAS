@@ -17,7 +17,7 @@ class EwsStrategy(Strategy):
         compostion = self.find_arch_info(current_config)
         print(f'Current architecture: {compostion}')
 
-        analysis_data.append({"architecture": compostion, "Response_time": self.response_time(self.knowledge.monitored_fresh_data)})
+        analysis_data.append({"config": current_config ,"architecture": compostion, "Response_time": self.response_time(self.knowledge.monitored_fresh_data)})
         print(f'Analysis data1: {analysis_data}')
 
         #print(f'Current architecture: {compostion}')
@@ -30,9 +30,9 @@ class EwsStrategy(Strategy):
             time.sleep(2)
             self.monitor()
             compostion = self.find_arch_info(config)
-            print(f'Current architecture: {compostion}')
-            analysis_data.append({"architecture": compostion, "Response_time": self.response_time(self.knowledge.monitored_fresh_data)})
-            print(f'Analysis data1: {analysis_data}')
+            #print(f'Current architecture: {compostion}')
+            analysis_data.append({"config": config ,"architecture": compostion, "Response_time": self.response_time(self.knowledge.monitored_fresh_data)})
+            #print(f'Analysis data1: {analysis_data}')
 
         self.knowledge.analysis_data = analysis_data
         print(f'Analysis data2: {self.knowledge.analysis_data}')
@@ -40,7 +40,7 @@ class EwsStrategy(Strategy):
         return True;
 
     def plan(self):
-
+        start = time.time()
         # Example config list
         data = self.knowledge.analysis_data
         exploration_time_frame = 10
@@ -48,8 +48,14 @@ class EwsStrategy(Strategy):
 
         # Call ucb_algorithm
         best_config = self.ucb_algorithm(data, exploration_time_frame, upper_confidence_bound_parameter)
+        #best_config = self.epsilon_greedy(data, 0.1)
         print(f'Best architecture: {best_config}')
+        end = time.time()
+        print(f'Time taken to find the Best architecture for UCB algo: {(end - start)*1000} ms')
+        # Set the plan data to the best config found
         self.knowledge.plan_data = best_config
+
+        return True
 
     def response_time(self, data):
         # Initialize counter and value with default values
@@ -132,6 +138,18 @@ class EwsStrategy(Strategy):
         # Return the config with the highest average reward
         best_config_index = np.argmax(average_rewards)
         return config_list[best_config_index]
+    
+
+    def epsilon_greedy(self,config_list, exploration_rate):
+        # Sort the data by response time in ascending order
+        sorted_data = sorted(config_list, key=lambda x: x['Response_time'])
+
+        # Choose the best configuration with probability 1 - epsilon
+        if random.random() > exploration_rate:
+            return sorted_data[0]
+        else:
+            # Choose a random configuration with probability epsilon
+            return random.choice(config_list)
 
     def reward_function(self, config):
         # Calculate the reward for the given config
