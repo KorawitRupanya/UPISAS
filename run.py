@@ -1,4 +1,4 @@
-from UPISAS.strategies.ews import EwsStrategy
+from UPISAS.strategies.ews_strategy import EwsStrategy
 from UPISAS.exemplars.ews import EWS
 from UPISAS.exemplars.swim import SWIM
 import sys

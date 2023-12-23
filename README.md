@@ -12,7 +12,9 @@ Tested with Python 3.9.12
 In a terminal, navigate to the parent folder of the project and issue:
 ```
 pip install -r requirements.txt
+
 ```
+
 ### Run unit tests
 In a terminal, navigate to the parent folder of the project and issue:
 ```
@@ -24,9 +26,14 @@ This is how to run test for EWS interface
 python -m UPISAS.tests.ews.test_ews_interface
 ```
 ### Run
+
+Firstly to run the solution you need to have EWS docker image readily available and ews container running to use by our wrapper server and also the wrapper server docker image should be available. ( You can build the wrapper server image using our FAS API project )
+
+run the client
+
 In a terminal, navigate to the parent folder of the project and issue:
 ```
-python run.py
+python3 run.py
 ```
 
 

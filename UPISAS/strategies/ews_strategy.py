@@ -35,7 +35,7 @@ class EwsStrategy(Strategy):
             #print(f'Analysis data1: {analysis_data}')
 
         self.knowledge.analysis_data = analysis_data
-        print(f'Analysis data2: {self.knowledge.analysis_data}')
+        print(f'All Analysis data: {self.knowledge.analysis_data}')
         
         return True;
 
