@@ -42,6 +42,14 @@ if __name__ == '__main__':
                 print(f'Time taken to adapt: {end - start} seconds')
             # Once the learning is Finished, print the best architecture
             else:
-                print(f'Best architecture: {strategy.knowledge.plan_data}')
+                monitoring_data = []
+                data = strategy.knowledge.monitored_fresh_data
+                # Get the current config
+                current_config = data["config"]
+                #Find the architecture of the current config
+                compostion = strategy.find_arch_info(current_config)
+
+                monitoring_data.append({"config": current_config ,"architecture": compostion, "Response_time": strategy.response_time(strategy.knowledge.monitored_fresh_data)})
+                print(f'Best architecture: {monitoring_data}')
     except:
         sys.exit(0)
